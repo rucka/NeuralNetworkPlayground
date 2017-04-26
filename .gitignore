@@ -90,4 +90,3 @@ ENV/
 
 references
 logs
-!./logs/fake
