@@ -90,3 +90,5 @@ ENV/
 
 references
 logs
+!data/.keep
+data
