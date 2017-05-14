@@ -94,6 +94,9 @@ logs/*
 data/*
 !data/.keep
 !data/people_classification
+/**/*.bkp
+/**/*.temp.*
 vir
 
 data/people_classification/.DS_Store
+notebook/kaggle-facial-kp-detection
