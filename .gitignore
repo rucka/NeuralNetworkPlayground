@@ -90,7 +90,9 @@ ENV/
 
 references
 logs
+data/*
 !data/.keep
 !data/people_classification
-data
 vir
+
+data/people_classification/.DS_Store
