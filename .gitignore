@@ -91,5 +91,6 @@ ENV/
 references
 logs
 !data/.keep
+!data/people_classification
 data
 vir
