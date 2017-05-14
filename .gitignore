@@ -89,7 +89,8 @@ ENV/
 .ropeproject
 
 references
-logs
+logs/*
+!logs/.keep
 data/*
 !data/.keep
 !data/people_classification
