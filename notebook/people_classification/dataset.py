@@ -11,15 +11,15 @@ import tensorflow as tf
 def gender_to_num_op(v):
     def f1(): return tf.constant(1)
     def f2(): return tf.constant(2)
-    def f3(): return tf.constant(3)
-    def f4(): return tf.constant(0)
+    def f3(): return tf.constant(1)
+    def f4(): return tf.constant(1)
     return tf.case({
         tf.equal(v, tf.constant('m')): f1,
         tf.equal(v, tf.constant('f')): f2,
         tf.equal(v, tf.constant('u')): f3
         }, default=f4, exclusive=True)
 def num_to_gender(v):
-    options={0:'',1:'m',2:'f',3:'u'}
+    options={1:'m',2:'f'}
     return options[v]
 def age_to_num_op(v):
     def fdef(): return tf.constant(-1)
@@ -66,6 +66,28 @@ def num_to_age(v):
              38:'(38, 43)',44:'(38, 48)',45:'45',48:'(48, 53)',55:'55',58:'58',
              60:'(60, 100)'}
     return options[v]
+
+fn = lambda t: t / 255
+vfunc = np.vectorize(fn)
+def images_as_float(img, batch_size, data_size):
+    i = img.reshape(batch_size*data_size)
+    i = vfunc(np.array(i, dtype=np.float32))
+    i = i.reshape(batch_size,data_size)
+    return i
+
+def extract_gender(features):
+    def extract(v):
+        def f1(): return tf.constant([1,0,0])
+        def f2(): return tf.constant([0,1,0])
+        def f3(): return tf.constant([0,0,1])
+        def f4(): return tf.constant([0,0,0])
+        return tf.case({
+            tf.equal(v[1], tf.constant(1)): f1,
+            tf.equal(v[1], tf.constant(2)): f2,
+            tf.equal(v[1], tf.constant(3)): f3
+            }, default=f4, exclusive=True)
+    return tf.map_fn(extract, features, dtype=tf.int32)
+
 def image_path_op(content):
     r = tf.py_func(os.path.join, [content[0], tf.constant('*.') + content[2] + tf.constant('.') + content[1]], tf.string)
     r = tf.reshape(r, [])
@@ -106,10 +128,25 @@ def input_pipeline_for_single_feature(path, batch_size, image_prefix, image_dime
     data_batch = tf.reshape(data_batch,[batch_size, image_dimension[0] * image_dimension[1] * 3])
     return data_batch, label_batch
 
-def path_to_image(paths, root, image_prefix, size):
+def path_to_image_resize(paths, root, image_prefix, size):
     def load_image(p):
         fp = os.path.join(root, string.replace(p, '*', image_prefix))
         return array(Image.open(fp).resize(size))
+    def load_image_op(x):
+        return tf.py_func(load_image, [x], tf.uint8)
+    return tf.map_fn(load_image_op, paths, dtype=tf.uint8)
+
+def path_to_image_crop(paths, root, image_prefix, size):
+    def load_image(p):
+        fp = os.path.join(root, string.replace(p, '*', image_prefix))
+        im = Image.open(fp)
+        width, height = im.size   # Get dimensions
+        left = (width - size[0])/2
+        top = (height - size[1])/2
+        right = (width + size[0])/2
+        bottom = (height + size[1])/2
+        im = im.crop((left, top, right, bottom))
+        return array(im)
     def load_image_op(x):
         return tf.py_func(load_image, [x], tf.uint8)
     return tf.map_fn(load_image_op, paths, dtype=tf.uint8)
