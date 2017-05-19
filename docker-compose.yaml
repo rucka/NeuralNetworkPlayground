@@ -1,0 +1,14 @@
+version: '2'
+services:
+  book:
+    build: .
+    image: rucka/tensor_opencv:0.1
+    ports:
+     - "8888:8888"
+    volumes:
+     - ./data:/data
+     - ./logs:/logs
+     - ./notebook:/book
+     - ./models:/models
+    working_dir: /book
+    entrypoint: sh -c "/run_jupyter.sh --allow-root"
