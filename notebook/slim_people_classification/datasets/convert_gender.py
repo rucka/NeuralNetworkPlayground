@@ -55,7 +55,7 @@ def _get_filenames_and_classes(dataset_dir):
     return ds['filename'], ds['gender'], src.labels_gender(ds)
 
 def _get_dataset_filename(dataset_dir, split_name, shard_id):
-  output_filename = 'age_%s_%05d-of-%05d.tfrecord' % (
+  output_filename = 'genders_%s_%05d-of-%05d.tfrecord' % (
       split_name, shard_id, _NUM_SHARDS)
   return os.path.join(dataset_dir, output_filename)
 
