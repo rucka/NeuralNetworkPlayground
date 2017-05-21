@@ -43,7 +43,7 @@ def main(_):
   if FLAGS.dataset_name == 'age':
     convert_age.run(FLAGS.dataset_dir)
   elif FLAGS.dataset_name == 'gender':
-    convert_age.run(FLAGS.dataset_dir)
+    convert_gender.run(FLAGS.dataset_dir)
   else:
     raise ValueError(
         'dataset_name [%s] was not recognized.' % FLAGS.dataset_dir)
