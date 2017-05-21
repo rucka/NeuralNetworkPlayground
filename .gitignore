@@ -91,6 +91,8 @@ ENV/
 references
 logs/*
 !logs/.keep
+tmp/*
+!tmp/.keep
 data/*
 !data/.keep
 !data/people_classification
