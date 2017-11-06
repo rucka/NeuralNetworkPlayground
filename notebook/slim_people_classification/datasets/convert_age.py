@@ -13,7 +13,7 @@ from datasets import dataset_utils
 import datasets.source as src
 
 # The folder contains source files and labels.
-SOURCE_DIR = '/data/people_classification'
+SOURCE_DIR = '/data/people_classification_all'
 
 # The number of shards per dataset split.
 _NUM_SHARDS = 5
@@ -22,7 +22,7 @@ _NUM_SHARDS = 5
 _RANDOM_SEED = 0
 
 # The number of images in the validation set.
-_NUM_VALIDATION = 350
+_NUM_VALIDATION = 5605 #TOT: 22420, rate 25% (5605, 16815)
 
 class ImageReader(object):
   """Helper class that provides TensorFlow image coding utilities."""
